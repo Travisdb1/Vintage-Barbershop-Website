@@ -10,6 +10,32 @@ const ctaBtn = document.getElementById("ctaBtn");
 const callBtn = document.getElementById("callBtn");
 const phoneLink = document.getElementById("phoneLink");
 const heading = document.getElementById("heroHeading");
+const featureGrid = document.getElementById("featureGrid");
+// ----- Services Data (Array of Objects) -----
+const services = [
+    {
+        title: "Classic Haircut",
+        text: "Timeless cuts with modern precision tailored to your style.",
+        image: "assets/Images/feature-1.jpg"
+    },
+    {
+        title: "Beard Trim",
+        text: "Shape and line-up your beard for a clean, sharp finish.",
+        image: "assets/Images/feature-2.jpg"
+    },
+    {
+        title: "Straight Razor Shave",
+        text: "Hot towel treatment with a smooth traditional shave.",
+        image: "assets/Images/feature-3.jpg"
+    }
+];
+// ----- Navigation Data (Array of Objects) -----
+const navLinks = [
+    { label: "Home", href: "#hero" },
+    { label: "Services", href: "#features" },
+    { label: "Book", href: "#cta" },
+    { label: "Contact", href: "#footer" },
+];
 // ----- Helpers / Functions ----- 
 // Update footer year automatically
 const setCurrentYear = () => { 
@@ -75,3 +101,78 @@ if (callBtn) { // only wire this up if the call button exists on the page
         }
     });
 }
+// ----- Render Features using forEach() -----
+const renderFeatures = () => {
+    if (!featureGrid) return; // guard clause, if featurGrid ele doesnt exist dont run the func
+    services.forEach((service) => { // everything in these () WILL happen to each item in array
+        const card = document.createElement("article"); // creates an article tag and stores it in the var, card
+        card.classList.add("feature-card"); // adds the class feature-card to the article tag we created
+        card.innerHTML = `
+        <img src="${service.image}" alt="${service.title}" class="feature-img" 
+        />
+        <h3 class="feature-title">${service.title}</h3>
+        <p class="feature-text">${service.text}</p>
+        `;
+        featureGrid.appendChild(card);
+    });
+};
+// card.innerHTML...takes the markup we created with all its attributes and gives it to the card var
+// <img class="" />..... this is the markup that gets passed to article tag for each card
+// featureGrid.appendChild("card"); // adds each article tag with all the classes, img, h3, p tags.... into the ele whose ID is featureGrid
+
+// ----- Render Features using map() -----
+const renderFeaturesMap = () => {
+    const cardsHTML = services.map((service) => {
+        return `
+        <article class="feature-card">
+         <img src="${service.image}" alt="${service.title}" class= "feature-img" />
+         <h3 class="feature-title">${service.title}</h3>
+         <p class= "feature-text">${service.text}</p>
+         </article>
+         `;
+    }).join("");
+
+    featureGrid.innerHTML = cardsHTML;
+};
+
+// array.forEach((item) => {
+//   create element
+//   insert data
+//   add to page 
+// })
+// ----- Render Navigation using map() -----
+const renderNavigation = () => {
+    // Desktop Nav
+    if(nav) {
+        const navHTML = navLinks.map((link) => {
+            returnm `
+            <a href="${link.href}" class="nav-link"${linklabel}</a>
+            `;
+        }).join("");
+    }
+    // Mobile Nav
+    if (mobileMenu) {
+        const mobileHTML = navLinks.map((link) => {
+            return `
+            <a href="${link.href}" class="mobile-link">${link.label}</a>
+            `;
+        }).join("")
+
+        mobileMenu.innerHTML = mobileHTML
+    }
+};
+// array.map()
+// return HTML
+// join("")
+// insert into DOM
+
+// Why .join()?
+// Because map returns and array
+// ["<a>Home</a>", "<a>About</a>"]
+// join converts it into ONE HTML string
+
+
+// ----- Function calls (shows two diff ways to do the samething for the cards)(forEach/map)----- 
+renderFeatures();
+//renderFeaturesMap();
+renderNavigation();
