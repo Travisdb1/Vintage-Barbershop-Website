@@ -11,6 +11,8 @@ const callBtn = document.getElementById("callBtn");
 const phoneLink = document.getElementById("phoneLink");
 const heading = document.getElementById("heroHeading");
 const featureGrid = document.getElementById("featureGrid");
+const nav = document.getElementById("nav");
+const siteHeader = document.querySelector(".site-header");
 // ----- Services Data (Array of Objects) -----
 const services = [
     {
@@ -65,6 +67,29 @@ const updateHeadingText = (newText) => { // this function will change the hero h
     if (!heading) return; // if the heading element doesnt exist on the page, stop here so nothing breaks
     heading.textContent = newText; // set the heading's visible text to the newText We were given
 };
+// Makes navbar stick on scroll (Sticky Navbar)
+const handleHeaderOnScroll = () => {
+    if (!siteHeader) return;
+    if (window.scrollY > 10) {
+        siteHeader.classList.add("is-scrolled");
+    } else {
+        siteHeader.classList.remove("is-scrolled");
+    }
+};
+// ----- Modal Logic -----
+// Opens the modal
+const openServiceModal = (serviceId) => {
+    if (
+        !serviceModal ||
+        !serviceModalTitle ||
+        !serviceModalPrice ||
+        !serviceModalList
+    )
+    return;
+    const selectedService = services.find(
+
+    )
+}
 // ----- Event Listeners -----
 // 1) Set year on page load
 setCurrentYear();
@@ -99,6 +124,21 @@ if (callBtn) { // only wire this up if the call button exists on the page
         } else {
             updateHeadingText("Call feature coming next!"); // fall back to a placeholder message
         }
+    });
+}
+// 6) Rounds corners of navbar on scroll
+window.addEventListener("scroll", handleHeaderOnScroll);
+if (callBtn) {
+    callBtn.addEventListener("click", () => {
+        window.location.href = `tel:${shopInfo.phoneRaw}`;
+    });
+}
+// 7) Opens the modals for the card clicked
+if (featureGrid) {
+    featureGrid.addEventListener("click", (event) => {
+        const clickdButton = event.target.closest(".service-details-btn");
+        if (!clickdButton) return;
+        const serviceId = clickedButton.dataset.serviceId
     });
 }
 // ----- Render Features using forEach() -----
@@ -145,10 +185,12 @@ const renderNavigation = () => {
     // Desktop Nav
     if(nav) {
         const navHTML = navLinks.map((link) => {
-            returnm `
-            <a href="${link.href}" class="nav-link"${linklabel}</a>
+            return `
+            <a href="${link.href}" class="nav-link">${link.label}</a>
             `;
         }).join("");
+
+        nav.innerHTML = navHTML;
     }
     // Mobile Nav
     if (mobileMenu) {
@@ -158,7 +200,7 @@ const renderNavigation = () => {
             `;
         }).join("")
 
-        mobileMenu.innerHTML = mobileHTML
+        mobileMenu.innerHTML = mobileHTML;
     }
 };
 // array.map()
@@ -176,3 +218,5 @@ const renderNavigation = () => {
 renderFeatures();
 //renderFeaturesMap();
 renderNavigation();
+handleHeaderOnScroll();
+renderServices();
